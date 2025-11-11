@@ -1,0 +1,15 @@
+{
+  "username": "sanjay",
+  "email": "sanjay123@example.com",
+  "password": "sanjay123456",
+  "role": "user"
+}
+
+
+
+
+
+
+"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2OTBiY2ZkNmY4MTM3MzA4YjgwNDViYWUiLCJyb2xlIjoidXNlciIsImlhdCI6MTc2MjQ1MjIxMywiZXhwIjoxNzYyNDU5NDEzfQ.tsWH6omWagaxr8q5bfd8eSCE_i87_U50uj0mLASJ1Zc"
+
+Product id="_id": "690ce9d51baf684ad35a5a1a",

@@ -1,0 +1,44 @@
+.orders-container {
+  max-width: 700px;
+  margin: 44px auto;
+  background: #fff;
+  border-radius: 10px;
+  padding: 30px;
+  box-shadow: 0 2px 8px #ccc;
+}
+
+.orders-title {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 24px;
+  color: #1a1a6c;
+  text-align: center;
+}
+
+.orders-empty {
+  text-align: center;
+  font-size: 1.1rem;
+  color: #555;
+  margin-top: 30px;
+}
+
+.order-block {
+  border: 1px solid #e3e3e3;
+  border-radius: 7px;
+  margin-bottom: 18px;
+  padding: 16px;
+  background: #fafaff;
+}
+
+.order-header {
+  font-weight: 600;
+  margin-bottom: 10px;
+  font-size: 1.1rem;
+  color: #333;
+}
+
+.order-product-list {
+  padding-left: 22px;
+  list-style-type: disc;
+  color: #565656;
+}

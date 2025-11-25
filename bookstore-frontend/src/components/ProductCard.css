@@ -1,0 +1,88 @@
+.product-card {
+  background: #fff;
+  border-radius: 18px;
+  box-shadow: 0 6px 32px rgba(65,90,180,0.13);
+  padding: 28px 22px 22px 22px;
+  width: 270px;
+  min-height: 420px;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: box-shadow 0.22s, transform 0.22s;
+  position: relative;
+  border: 1px solid #f4f7fc;
+}
+.product-card:hover {
+  box-shadow: 0 16px 48px rgba(65,90,180,0.18);
+  transform: translateY(-6px) scale(1.032);
+  border-color: #dceafc;
+}
+.product-image {
+  width: 120px;
+  height: 164px;
+  object-fit: cover;
+  border-radius: 13px;
+  box-shadow: 0 2px 14px rgba(56,70,129,0.09);
+  margin-bottom: 20px;
+  background: #f6f5ff;
+}
+
+.product-title {
+  font-size: 1.18rem;
+  font-weight: 800;
+  color: #305eaf;
+  margin: 8px 0 3px 0;
+  text-align: center;
+}
+.product-author {
+  font-size: 1.07rem;
+  color: #727272;
+  margin-bottom: 7px;
+  text-align: center;
+}
+.product-price {
+  font-weight: 700;
+  color: #20b350;
+  font-size: 1.18rem;
+  margin-bottom: 0.5rem;
+  text-align: center;
+}
+.product-link {
+  color: #383cc0;
+  text-decoration: underline;
+  font-size: 1.04rem;
+  margin-bottom: 12px;
+  margin-top: 8px;
+  font-family: inherit;
+  border-radius: 6px;
+  padding: 1px 9px;
+  background: #edefff;
+  transition: background 0.15s, color 0.18s;
+}
+.product-link:hover {
+  text-decoration: none;
+  background: #e0e6ff;
+  color: #1a1b79;
+}
+
+.product-add-btn {
+  margin-top: 13px;
+  background: linear-gradient(90deg,#19a9df 0%,#3bdf7c 100%);
+  color: #fff;
+  font-weight: 700;
+  font-size: 1.02rem;
+  border: none;
+  border-radius: 12px;
+  box-shadow: 0 2px 14px rgba(24,54,68,0.12);
+  padding: 13px 28px;
+  cursor: pointer;
+  transition: background 0.18s, transform 0.16s;
+  letter-spacing: 0.5px;
+}
+.product-add-btn:hover {
+  background: linear-gradient(90deg,#1685b1 0%,#26ac53 100%);
+  transform: scale(1.09);
+}
+/* Optionally add a sale badge, rating, genre icons—extend below */
+

@@ -1,0 +1,110 @@
+.auth-form {
+  background: #fff;
+  padding: 32px;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px #ccc;
+  max-width: 370px;
+  margin: 44px auto;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.auth-input {
+  padding: 13px;
+  border-radius: 6px;
+  border: 1px solid #aaa;
+  font-size: 1rem;
+}
+
+.auth-button {
+  background: #373ab8;
+  color: #fff;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  border-radius: 6px;
+  padding: 12px;
+  margin-top: 8px;
+  transition: background 0.25s ease;
+}
+
+.auth-button:hover {
+  background: #2b2c90;
+}
+
+.auth-page-wrapper {
+  min-height: calc(100vh - 68px);
+  background: radial-gradient(ellipse at 60% 20%, #ffd8b6 20%, #fbecde 55%, #f4f8fc 100%),
+              linear-gradient(135deg, #c2dbff 0%, #f6faff 90%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: 'Poppins', sans-serif;
+}
+
+.auth-page-wrapper {
+  min-height: calc(100vh - 68px);
+  background: radial-gradient(ellipse at 60% 20%, #c8b6ff 8%, #dee4ff 55%, #f4f8fc 100%),
+              linear-gradient(135deg, #c2dbff 90%, #f2e6ff 90%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: 'Poppins', sans-serif;
+}
+
+
+
+
+.auth-form {
+  background: #ffffffdd; /* white with slight transparency */
+  border-radius: 18px;
+  padding: 36px 48px 44px;
+  box-shadow: 0 14px 44px rgba(65,90,180,0.18);
+  width: 350px;
+  max-width: 90vw;
+  display: flex;
+  flex-direction: column;
+}
+
+.auth-input {
+  margin-bottom: 22px;
+  padding: 14px 18px;
+  font-size: 1.08rem;
+  border-radius: 10px;
+  border: 1.3px solid #8a8fd6;
+  color: #3b3d63;
+  transition: border-color 0.22s ease-in-out;
+  outline: none;
+  font-weight: 500;
+}
+
+.auth-input:focus {
+  border-color: #283496;
+  box-shadow: 0 0 6px #283496b0;
+}
+
+.auth-button {
+  background-image: linear-gradient(90deg, #0c2366, #1e69ff);
+  border: none;
+  border-radius: 14px;
+  color: #fff;
+  font-size: 1.16rem;
+  font-weight: 700;
+  padding: 14px 0;
+  cursor: pointer;
+  transition: background-image 0.3s ease;
+}
+
+.auth-button:hover {
+  background-image: linear-gradient(90deg, #11243d, #4979f7);
+}
+
+/* Auth messages below inputs */
+.auth-message {
+  color: #dd5555;
+  margin-top: 12px;
+  font-size: 1rem;
+  font-weight: 600;
+  text-align: center;
+}

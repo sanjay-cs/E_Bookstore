@@ -1,0 +1,27 @@
+.cart-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 0;
+  border-bottom: 1px solid #eee;
+}
+
+.cart-item-text {
+  font-size: 1rem;
+  color: #333;
+}
+
+.cart-item-remove-btn {
+  padding: 6px 12px;
+  border-radius: 5px;
+  background-color: #e03e3e;
+  color: white;
+  border: none;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: background-color 0.3s ease;
+}
+
+.cart-item-remove-btn:hover {
+  background-color: #a82b2b;
+}

@@ -22,10 +22,11 @@ router.post('/', authMiddleware, async (req, res) => {
         (p) => p.productId.toString() === productId
       );
       if (productIndex > -1) {
-        cart.products[productIndex].quantity = quantity;
+        cart.products[productIndex].quantity += quantity; // INCREMENT by specified quantity
       } else {
         cart.products.push({ productId, quantity });
-      }
+    }
+
     }
 
     // Calculate total price
@@ -83,5 +84,38 @@ router.delete('/:productId', authMiddleware, async (req, res) => {
     res.status(500).json({ message: 'Server error removing item' });
   }
 });
+
+// Update quantity for a product in cart
+router.put('/:productId', authMiddleware, async (req, res) => {
+  try {
+    const userId = req.userId;
+    const { quantity } = req.body;
+    const productId = req.params.productId;
+
+    const cart = await Cart.findOne({ userId });
+    if (!cart) return res.status(404).json({ message: 'Cart not found' });
+
+    const item = cart.products.find(
+      (i) => i.productId.toString() === productId
+    );
+    if (!item) return res.status(404).json({ message: 'Product not found in cart' });
+
+    item.quantity = quantity > 0 ? quantity : 1;
+
+    // Recalculate total
+    let total = 0;
+    for (const item of cart.products) {
+      const product = await Product.findById(item.productId);
+      total += product.price * item.quantity;
+    }
+    cart.total = total;
+
+    await cart.save();
+    res.json(cart);
+  } catch (error) {
+    res.status(500).json({ message: 'Server error updating quantity' });
+  }
+});
+
 
 module.exports = router;

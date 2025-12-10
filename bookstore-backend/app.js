@@ -10,7 +10,7 @@ app.use(express.json());
 
 
 const productRoutes = require('./routes/productRoutes');
-app.use('/api/products', productRoutes);     
+app.use('/api/products', productRoutes); 
 
 const authRoutes = require('./routes/authRoutes');
 app.use('/api/auth', authRoutes);
@@ -20,6 +20,10 @@ app.use('/api/cart', cartRoutes);
 
 const orderRoutes = require('./routes/orderRoutes');
 app.use('/api/order', orderRoutes);
+
+const paymentRoutes = require('./routes/paymentRoutes');
+app.use('/api/payment', paymentRoutes);
+
 
 
 

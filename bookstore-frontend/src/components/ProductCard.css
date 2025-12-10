@@ -1,88 +1,146 @@
+/* src/components/ProductCard.css */
+
 .product-card {
-  background: #fff;
-  border-radius: 18px;
-  box-shadow: 0 6px 32px rgba(65,90,180,0.13);
-  padding: 28px 22px 22px 22px;
-  width: 270px;
-  min-height: 420px;
-  margin: 0;
+  /* Glassmorphism */
+  background: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.8);
+
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
   display: flex;
   flex-direction: column;
-  align-items: center;
-  transition: box-shadow 0.22s, transform 0.22s;
+  height: 100%;
   position: relative;
-  border: 1px solid #f4f7fc;
+
+  /* Initial state for animation */
+  animation: fadeScale 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  opacity: 0;
 }
+
 .product-card:hover {
-  box-shadow: 0 16px 48px rgba(65,90,180,0.18);
-  transform: translateY(-6px) scale(1.032);
-  border-color: #dceafc;
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.12);
+  z-index: 10;
 }
+
+.product-image-container {
+  position: relative;
+  width: 100%;
+  padding-top: 140%;
+  /* 1:1.4 aspect ratio for books */
+  background: #f5f5f7;
+  overflow: hidden;
+}
+
 .product-image {
-  width: 120px;
-  height: 164px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
   object-fit: cover;
-  border-radius: 13px;
-  box-shadow: 0 2px 14px rgba(56,70,129,0.09);
-  margin-bottom: 20px;
-  background: #f6f5ff;
+  transition: transform 0.5s ease;
+}
+
+.product-card:hover .product-image {
+  transform: scale(1.05);
+}
+
+.product-content {
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
 }
 
 .product-title {
-  font-size: 1.18rem;
-  font-weight: 800;
-  color: #305eaf;
-  margin: 8px 0 3px 0;
-  text-align: center;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--text-main);
+  margin: 0 0 0.5rem 0;
+  line-height: 1.4;
+  /* Truncate text */
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
+
 .product-author {
-  font-size: 1.07rem;
-  color: #727272;
-  margin-bottom: 7px;
-  text-align: center;
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  margin: 0 0 1rem 0;
 }
+
+.product-footer {
+  margin-top: auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
 .product-price {
-  font-weight: 700;
-  color: #20b350;
-  font-size: 1.18rem;
-  margin-bottom: 0.5rem;
-  text-align: center;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--text-main);
+  margin: 0;
 }
-.product-link {
-  color: #383cc0;
-  text-decoration: underline;
-  font-size: 1.04rem;
-  margin-bottom: 12px;
-  margin-top: 8px;
-  font-family: inherit;
-  border-radius: 6px;
-  padding: 1px 9px;
-  background: #edefff;
-  transition: background 0.15s, color 0.18s;
+
+.product-actions {
+  display: flex;
+  gap: 0.5rem;
 }
-.product-link:hover {
-  text-decoration: none;
-  background: #e0e6ff;
-  color: #1a1b79;
+
+.btn-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-body);
+  color: var(--text-main);
+  transition: all var(--duration) var(--ease);
+}
+
+.btn-icon:hover {
+  background: var(--primary);
+  color: white;
 }
 
 .product-add-btn {
-  margin-top: 13px;
-  background: linear-gradient(90deg,#19a9df 0%,#3bdf7c 100%);
-  color: #fff;
-  font-weight: 700;
-  font-size: 1.02rem;
-  border: none;
-  border-radius: 12px;
-  box-shadow: 0 2px 14px rgba(24,54,68,0.12);
-  padding: 13px 28px;
-  cursor: pointer;
-  transition: background 0.18s, transform 0.16s;
-  letter-spacing: 0.5px;
+  width: 100%;
+  padding: 0.6rem 1rem;
+  background: #f5f5f7;
+  color: var(--primary);
+  font-weight: 500;
+  border-radius: 980px;
+  margin-top: 1rem;
+  font-size: 0.9rem;
+  transition: all var(--duration) var(--ease);
 }
-.product-add-btn:hover {
-  background: linear-gradient(90deg,#1685b1 0%,#26ac53 100%);
-  transform: scale(1.09);
-}
-/* Optionally add a sale badge, rating, genre icons—extend below */
 
+.product-add-btn:hover {
+  background: var(--primary);
+  color: white;
+}
+
+.overlay-link {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+
+/* Ensure button is clickable above the overlay link */
+.product-actions,
+.product-add-btn {
+  position: relative;
+  z-index: 2;
+}

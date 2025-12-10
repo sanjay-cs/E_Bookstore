@@ -4,45 +4,78 @@ const Cart = require('../models/Cart');
 const Product = require('../models/Product');
 const authMiddleware = require('../middleware/authMiddleware'); // Import middleware
 
+
+
+
+async function recalculateTotal(cart) {
+  let total = 0;
+  for (const item of cart.products) {
+    const product = await Product.findById(item.productId);
+    if (!product) continue; // skip deleted products
+    total += product.price * item.quantity;
+  }
+  return total;
+}
+
+
 // Add or update product in cart (authenticated user)
+// routes/cartRoutes.js
 router.post('/', authMiddleware, async (req, res) => {
   try {
-    const userId = req.userId; // from middleware
-    const { productId, quantity } = req.body;
+    const userId = req.userId;              // from middleware
+    let { productId, quantity } = req.body;
+
+    console.log('ADD TO CART', { userId, productId, quantity });
+
+    // basic validation
+    if (!productId) {
+      return res
+        .status(400)
+        .json({ message: 'productId is required' });
+    }
+
+    quantity = Number(quantity) || 1;
+    if (quantity < 1) quantity = 1;
 
     let cart = await Cart.findOne({ userId });
 
     if (!cart) {
+      // first item in new cart
       cart = new Cart({
         userId,
         products: [{ productId, quantity }],
       });
     } else {
+      // make sure productId exists before toString()
       const productIndex = cart.products.findIndex(
-        (p) => p.productId.toString() === productId
+        (p) => p.productId && p.productId.toString() === productId
       );
+
       if (productIndex > -1) {
-        cart.products[productIndex].quantity += quantity; // INCREMENT by specified quantity
+        cart.products[productIndex].quantity += quantity;
       } else {
         cart.products.push({ productId, quantity });
+      }
     }
 
-    }
+    // recalc total from DB prices
+    cart.total = await recalculateTotal(cart);
 
-    // Calculate total price
-    let total = 0;
-    for (const item of cart.products) {
-      const product = await Product.findById(item.productId);
-      total += product.price * item.quantity;
+    // re-apply coupon if active
+    if (cart.coupon === 'BEST25') {
+      cart.total = Math.round(cart.total * 0.75);
     }
-    cart.total = total;
 
     const savedCart = await cart.save();
-    res.json(savedCart);
+    return res.json(savedCart);
   } catch (error) {
-    res.status(500).json({ message: 'Server error adding to cart' });
+    console.error('ADD TO CART error:', error);
+    return res
+      .status(500)
+      .json({ message: 'Server error adding to cart' });
   }
 });
+
 
 // Get authenticated user's cart
 router.get('/', authMiddleware, async (req, res) => {
@@ -58,32 +91,41 @@ router.get('/', authMiddleware, async (req, res) => {
 });
 
 // Remove a product from the cart (authenticated user)
+// Remove a product from the cart (authenticated user)
 router.delete('/:productId', authMiddleware, async (req, res) => {
   try {
     const userId = req.userId;
     const productId = req.params.productId;
+    console.log('DELETE /cart', { userId, productId });
 
     const cart = await Cart.findOne({ userId });
-    if (!cart) return res.status(404).json({ message: 'Cart not found' });
+    console.log('Found cart?', !!cart, 'items:', cart?.products.length);
 
-    cart.products = cart.products.filter(
-      (item) => item.productId.toString() !== productId
-    );
-
-    // Recalculate total price
-    let total = 0;
-    for (const item of cart.products) {
-      const product = await Product.findById(item.productId);
-      total += product.price * item.quantity;
+    if (!cart) {
+      return res.status(404).json({ message: 'Cart not found' });
     }
-    cart.total = total;
+
+    // SAFER: handle items where productId might be missing
+    cart.products = cart.products.filter((item) => {
+      if (!item.productId) return true; // keep malformed items, or `false` if you want to clean them
+      return item.productId.toString() !== productId;
+    });
+
+    cart.total = await recalculateTotal(cart);
+    if (cart.coupon === 'BEST25') {
+      cart.total = Math.round(cart.total * 0.75);
+    }
 
     await cart.save();
-    res.json({ message: 'Item removed', cart });
+    return res.json({ message: 'Item removed', cart });
   } catch (error) {
-    res.status(500).json({ message: 'Server error removing item' });
+    console.error('Remove error:', error);
+    return res
+      .status(500)
+      .json({ message: 'Server error removing item' });
   }
 });
+
 
 // Update quantity for a product in cart
 router.put('/:productId', authMiddleware, async (req, res) => {
@@ -103,12 +145,12 @@ router.put('/:productId', authMiddleware, async (req, res) => {
     item.quantity = quantity > 0 ? quantity : 1;
 
     // Recalculate total
-    let total = 0;
-    for (const item of cart.products) {
-      const product = await Product.findById(item.productId);
-      total += product.price * item.quantity;
+   cart.total = await recalculateTotal(cart);
+   // IMPORTANT: apply discount again if coupon is active
+    if (cart.coupon === 'BEST25') {
+    cart.total = Math.round(cart.total * 0.75);
     }
-    cart.total = total;
+
 
     await cart.save();
     res.json(cart);
@@ -117,5 +159,42 @@ router.put('/:productId', authMiddleware, async (req, res) => {
   }
 });
 
+router.post('/apply-coupon', authMiddleware, async (req, res) => {
+  try {
+    const userId = req.userId;
+    const { coupon, remove } = req.body; // remove = true to clear
 
+    let cart = await Cart.findOne({ userId });
+    if (!cart) return res.status(404).json({ message: 'Cart not found' });
+
+    // always start from full total (no discount)
+    let baseTotal = await recalculateTotal(cart);
+
+    // remove coupon
+    if (remove) {
+      cart.coupon = null;
+      cart.total = baseTotal;
+      await cart.save();
+      return res.json(cart);
+    }
+
+    // apply coupon only if not already applied
+    if (coupon && coupon.toUpperCase() === 'BEST25') {
+      cart.coupon = 'BEST25';
+      cart.total = Math.round(baseTotal * 0.75);
+    } else {
+      // invalid code: do not change coupon or total
+      cart.total = baseTotal;
+      return res.status(400).json({ message: 'Invalid coupon code' });
+    }
+
+    await cart.save();
+    res.json(cart);
+  } catch (err) {
+    res.status(500).json({ message: 'Server error applying coupon' });
+  }
+});
+
+
+ 
 module.exports = router;

@@ -1,5 +1,5 @@
 import React, { useState, useContext } from 'react';
-import { login } from '../api/auth';
+import { login as loginApi } from '../api/auth';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
 import './AuthForm.css';
@@ -7,20 +7,37 @@ import './AuthForm.css';
 function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const { login: saveToken } = useContext(AuthContext);
+  const [error, setError] = useState('');          // NEW
+  const { login: saveAuth } = useContext(AuthContext);
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const res = await login(email, password);
-    saveToken(res.data.token);
-    navigate('/');
+    setError('');
+
+    try {
+      const res = await loginApi(email, password);
+      saveAuth(res.data.token, res.data.user);      // or just token if needed
+      navigate('/');
+    } catch (err) {
+      const msg =
+        err.response?.data?.message ||
+        'Invalid email or password';
+      setError(msg);                               // set message instead of alert
+    }
   };
 
   return (
     <div className="auth-page-wrapper">
       <form className="auth-form" onSubmit={handleSubmit}>
         <h2 className="auth-title">Sign In</h2>
+
+        {error && (
+          <div className="auth-error-popup">
+            {error}
+          </div>
+        )}
+
         <input
           className="auth-input"
           value={email}

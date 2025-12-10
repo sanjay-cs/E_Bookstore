@@ -11,6 +11,14 @@ export const addToCart = async ({ productId, quantity }) =>
 export const removeFromCart = async (productId) =>
   API.delete(`/cart/${productId}`);
 
-
+// Update quantity for an item
 export const updateCartQuantity = (productId, quantity) =>
   API.put(`/cart/${productId}`, { quantity });
+
+export const applyCoupon = (coupon) =>
+  API.post('/cart/apply-coupon', { coupon });
+
+export const removeCoupon = () =>
+  API.post('/cart/apply-coupon', { remove: true });
+
+
